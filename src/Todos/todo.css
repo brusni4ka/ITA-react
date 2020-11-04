@@ -1,0 +1,10 @@
+.todo-wrapper {
+    width: 60%;
+    margin: 0 auto;
+}
+
+.remove-btn {
+    border: 0;
+    background-color: #ff7682;
+    border-radius: 5px;
+}
