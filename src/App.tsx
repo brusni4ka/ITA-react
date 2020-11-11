@@ -85,11 +85,31 @@ function App() {
             <h1>Home</h1>
           </Route>
           <PrivateRoute path="/todo" isLogged={isLogged}>
-            {/*If you want to use route props, you have to wrap component in withRouter HOC or you can use hooks */}
+            {/*
+             If you want to use route props, you have to wrap component in withRouter HOC or you can use hooks
+             */}
             <Todos />
           </PrivateRoute>
-          {/*If you pass component as "component" prop, you will receive router props in props */}
+          {/*
+           If you pass component as "component" prop, you will receive router props in props
+           */}
           <Route path="/collections" component={Collections} />
+         {/*
+          You can pass component in render prop
+          Might be helpful if you want, as an example, render component depending on some condition
+          */}
+          <Route path="/new-path" render={(props: RouteComponentProps) => {
+            // if (someCondition) {
+            //   return <SomeComponent>
+            // }
+            return <Collections {...props} />
+            }}
+            
+          />
+          {/*
+           accepts all of the paths
+           Add it as the last route to render 404 page
+           */}
           <Route path="*">
             <h1>404 page</h1>
           </Route>
