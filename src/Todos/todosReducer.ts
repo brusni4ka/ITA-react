@@ -2,10 +2,12 @@ import { TodoActionTypes, TodosAction } from 'Todos/todosActions';
 
 export interface TodosState {
   items: string[];
+  loading: boolean;
 }
 
 const todosDefaultState: TodosState = {
-  items: []
+  items: [],
+  loading: false,
 };
 
 export const todosReducer = (state = todosDefaultState, action: TodosAction) => {
@@ -33,6 +35,32 @@ export const todosReducer = (state = todosDefaultState, action: TodosAction) => 
         items: updatedTodo
       }
     }
+    case TodoActionTypes.REQUEST_TODO: {
+      return {
+        ...state,
+        loading: true,
+      }
+    }
+    case TodoActionTypes.REQUEST_TODO_SUCCESS: {
+      return {
+        ...state,
+        items: action.items,
+        loading: false,
+      }
+    }
+    case TodoActionTypes.REQUEST_TODO_ERROR: {
+      return {
+        ...state,
+        loading: false,
+      }
+    }
+  
+    // case TodoActionTypes.RESET_TODOS: {
+    //   return {
+    //     state: todosDefaultState
+    //   }
+    // }
+    
     default: return state;
   }
   

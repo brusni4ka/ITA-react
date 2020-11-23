@@ -14,6 +14,14 @@ class Todos extends React.Component<TodosConnectProps, TodosState> {
     value: '',
   };
   
+  componentDidMount() {
+    this.props.requestTodo();
+  }
+  
+  componentWillMount() {
+    //this.props.resetTodos();
+  }
+  
   addTodo = () => {
     const { value } = this.state;
     this.props.addTodo(value);
@@ -31,22 +39,26 @@ class Todos extends React.Component<TodosConnectProps, TodosState> {
   
   render() {
     const { value } = this.state;
-    const { todos } = this.props;
+    const { todos, loading } = this.props;
     
     return (
       <div className="todo-container">
         <h1>TODOS</h1>
+        <button onClick={this.props.requestTodo}>Load MY todos</button>
+        
         <input type="text" value={value} onChange={this.changeValue} />
         <button onClick={this.addTodo}>ADD</button>
         
         <div className="todo-wrapper">
-          {todos.map((todo, index) => (
-            <Todo
-              key={index}
-              todo={todo}
-              onRemove={this.removeTodo(index)}
-              onUpdate={this.changeTodo(index)}
-            />
+          {loading ?
+            <span>loading...</span> :
+            todos.map((todo, index) => (
+              <Todo
+                key={index}
+                todo={todo}
+                onRemove={this.removeTodo(index)}
+                onUpdate={this.changeTodo(index)}
+              />
           ))}
         </div>
         

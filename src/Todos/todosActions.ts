@@ -2,7 +2,36 @@ export enum TodoActionTypes {
   ADD_TODO = 'ADD_TODO',
   REMOVE_TODO = 'REMOVE_TODO',
   CHANGE_TODO = 'CHANGE_TODO',
+  REQUEST_TODO = 'REQUEST_TODO',
+  REQUEST_TODO_SUCCESS = 'REQUEST_TODO_SUCCESS',
+  REQUEST_TODO_ERROR = 'REQUEST_TODO_ERROR',
 }
+
+export interface RequestTodoAction {
+  type: TodoActionTypes.REQUEST_TODO;
+}
+
+export const requestTodo = (): RequestTodoAction => ({
+  type: TodoActionTypes.REQUEST_TODO,
+});
+
+export interface RequestTodoErrorAction {
+  type: TodoActionTypes.REQUEST_TODO_ERROR;
+}
+
+export const requestTodoError = (): RequestTodoErrorAction => ({
+  type: TodoActionTypes.REQUEST_TODO_ERROR,
+});
+
+export interface RequestTodoSuccessAction {
+  type: TodoActionTypes.REQUEST_TODO_SUCCESS;
+  items: string[];
+}
+
+export const requestTodoSuccess = (items: string[]): RequestTodoSuccessAction => ({
+  type: TodoActionTypes.REQUEST_TODO_SUCCESS,
+  items
+});
 
 interface AddTodoAction {
   type: TodoActionTypes.ADD_TODO;
@@ -36,4 +65,10 @@ export const changeTodo = (id: number, value: string): ChangeTodoAction => ({
   value
 });
 
-export type TodosAction = AddTodoAction | RemoveTodoAction | ChangeTodoAction;
+export type TodosAction =
+  AddTodoAction |
+  RemoveTodoAction |
+  ChangeTodoAction |
+  RequestTodoAction |
+  RequestTodoSuccessAction |
+  RequestTodoErrorAction;
