@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-import Todos from 'Todos/Todos';
+import Todos from 'Todos';
 import {
   BrowserRouter as Router,
   Route,
@@ -10,6 +10,8 @@ import {
   Redirect,
   RouteProps, withRouter, useLocation, useHistory, useRouteMatch
 } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import store from 'store';
 
 const Collection = (props: RouteComponentProps<{id: string}>) => {
   return (
@@ -56,67 +58,69 @@ const PrivateRoute = ({ isLogged, children, ...routeProps }: RouteProps & { isLo
 function App() {
   const [isLogged, setIsLogged] = useState(false);
   return (
-    <div className="App">
-      <Router>
-  
-        <label htmlFor="isLogged">Logged</label>
-        <input name="isLogged" type="checkbox" checked={isLogged} onChange={(e) => setIsLogged(e.target.checked)}/>
-        
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/todo">Todo</Link>
-            </li>
-            <li>
-              <Link to="/collections">Collections</Link>
-            </li>
-            {/*<li>*/}
-            {/*  Use <Link> instead of <a> because of prevent default */}
-            {/*  <a href="/todo">Todo with A</a>*/}
-            {/*</li>*/}
-          </ul>
-        </nav>
-       
-        <Switch>
-          <Route path="/" exact>
-            <h1>Home</h1>
-          </Route>
-          <PrivateRoute path="/todo" isLogged={isLogged}>
-            {/*
+    <Provider store={store}>
+      <div className="App">
+        <Router>
+      
+          <label htmlFor="isLogged">Logged</label>
+          <input name="isLogged" type="checkbox" checked={isLogged} onChange={(e) => setIsLogged(e.target.checked)}/>
+      
+          <nav>
+            <ul>
+              <li>
+                <Link to="/">Home</Link>
+              </li>
+              <li>
+                <Link to="/todo">Todo</Link>
+              </li>
+              <li>
+                <Link to="/collections">Collections</Link>
+              </li>
+              {/*<li>*/}
+              {/*  Use <Link> instead of <a> because of prevent default */}
+              {/*  <a href="/todo">Todo with A</a>*/}
+              {/*</li>*/}
+            </ul>
+          </nav>
+      
+          <Switch>
+            <Route path="/" exact>
+              <h1>Home</h1>
+            </Route>
+            <PrivateRoute path="/todo" isLogged={isLogged}>
+              {/*
              If you want to use route props, you have to wrap component in withRouter HOC or you can use hooks
              */}
-            <Todos />
-          </PrivateRoute>
-          {/*
+              <Todos />
+            </PrivateRoute>
+            {/*
            If you pass component as "component" prop, you will receive router props in props
            */}
-          <Route path="/collections" component={Collections} />
-         {/*
+            <Route path="/collections" component={Collections} />
+            {/*
           You can pass component in render prop
           Might be helpful if you want, as an example, render component depending on some condition
           */}
-          <Route path="/new-path" render={(props: RouteComponentProps) => {
-            // if (someCondition) {
-            //   return <SomeComponent>
-            // }
-            return <Collections {...props} />
+            <Route path="/new-path" render={(props: RouteComponentProps) => {
+              // if (someCondition) {
+              //   return <SomeComponent>
+              // }
+              return <Collections {...props} />
             }}
-            
-          />
-          {/*
+        
+            />
+            {/*
            accepts all of the paths
            Add it as the last route to render 404 page
            */}
-          <Route path="*">
-            <h1>404 page</h1>
-          </Route>
-        </Switch>
-       
-      </Router>
-    </div>
+            <Route path="*">
+              <h1>404 page</h1>
+            </Route>
+          </Switch>
+    
+        </Router>
+      </div>
+    </Provider>
   );
 }
 

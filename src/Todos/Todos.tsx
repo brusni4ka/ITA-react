@@ -2,52 +2,36 @@ import React from 'react';
 import 'Todos/todo.css';
 
 import Todo from 'Todos/Todo';
+import { TodosConnectProps } from 'Todos';
 
 interface TodosState {
   value: string,
-  todos: string[],
 }
 
-class Todos extends React.Component<{}, TodosState> {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     ..
-  //   }
-  // }
+class Todos extends React.Component<TodosConnectProps, TodosState> {
   
   state: TodosState = {
     value: '',
-    todos: [],
   };
   
   addTodo = () => {
-    const {value, todos} = this.state;
-    this.setState({
-      value: '',
-      todos: [
-        ...todos,
-        value,
-      ]
-    })
+    const { value } = this.state;
+    this.props.addTodo(value);
   };
   
   removeTodo = (id: number) => () => {
-    const { todos } = this.state;
-    const updatedTodo = todos.filter((todo, index) => index !== id);
-    this.setState({ todos: updatedTodo });
+    this.props.removeTodo(id);
   };
   
   changeTodo = (id: number) => (newTodo: string) => {
-    const { todos } = this.state;
-    const updatedTodo = todos.map((todo, index) => index === id ? newTodo : todo);
-    this.setState({ todos: updatedTodo });
+    this.props.changeTodo(id, newTodo);
   };
   
   changeValue = (e: React.ChangeEvent<HTMLInputElement>) => this.setState({ value: e.target.value });
   
   render() {
-    const { value, todos } = this.state;
+    const { value } = this.state;
+    const { todos } = this.props;
     
     return (
       <div className="todo-container">
