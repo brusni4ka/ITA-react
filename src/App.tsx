@@ -13,10 +13,13 @@ import {
 import { Provider } from 'react-redux';
 import store from 'store';
 
-const Collection = (props: RouteComponentProps<{id: string}>) => {
+const Collection = () => {
+  const matches = useRouteMatch<{id: string}>();
+  const location = useLocation();
+  const history = useHistory();
   return (
     <>
-      <h1>{props.match.params.id}</h1>
+      <h1>{matches.params.id}</h1>
       <ComponentWithoutRouteProps />
     </>
   )

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
+import { useValue } from 'Todos/Todos';
 
 interface TodoProps {
   todo: string;
@@ -6,47 +7,36 @@ interface TodoProps {
   onUpdate(value: string): void;
 }
 
-interface TodoState {
-  editable: boolean;
-  value: string;
-}
-
-class Todo extends React.Component<TodoProps, TodoState> {
-  state: TodoState = {
-    editable: false,
-    value: this.props.todo,
-  };
+const Todo = (props: TodoProps) => {
+  const [value, setValue] = useValue(props.todo);
+  const [editable, setEditable] = useState(false);
   
-  toggleEditable = (flag: boolean) => () => this.setState(({ editable: flag }));
+  const toggleEditable = (flag: boolean) => () => setEditable(flag);
   
-  changeValue = (e: React.ChangeEvent<HTMLInputElement>) => this.setState({ value: e.target.value });
+  const changeValue = (e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value);
   
-  saveTodo = () => {
-    const { value } = this.state;
-    const { onUpdate } = this.props;
-    this.toggleEditable(false)();
+  const saveTodo = () => {
+    const { onUpdate } = props;
+    toggleEditable(false)();
     onUpdate(value);
   };
   
-  render() {
-    const { editable, value } = this.state;
-    const { todo, onRemove } = this.props;
-    return (
-      <div>
-        <div className="todo-text" onClick={this.toggleEditable(true)}>
-          { editable ?
-            <input
-              type="text"
-              value={value}
-              onChange={this.changeValue}
-              onBlur={this.saveTodo}
-            /> :
-            todo }
-        </div>
-        <button className="remove-btn" onClick={onRemove}>Remove</button>
+  const { todo, onRemove } = props;
+  return (
+    <div>
+      <div className="todo-text" onClick={toggleEditable(true)}>
+        { editable ?
+          <input
+            type="text"
+            value={value}
+            onChange={changeValue}
+            onBlur={saveTodo}
+          /> :
+          todo }
       </div>
-    );
-  };
-}
+      <button className="remove-btn" onClick={onRemove}>Remove</button>
+    </div>
+  );
+};
 
 export default Todo;
